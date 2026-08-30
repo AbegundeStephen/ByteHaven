@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CartButton } from "@/components/storefront/cart-button";
 
 export function Header() {
   return (
@@ -29,13 +30,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/cart"
-            className="text-primary hover:bg-muted inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors"
-            aria-label="View cart"
-          >
-            Cart
-          </Link>
+          <CartButton />
         </div>
       </div>
     </header>

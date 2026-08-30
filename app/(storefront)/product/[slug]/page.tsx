@@ -6,6 +6,7 @@ import { ImageGallery } from "@/components/storefront/image-gallery";
 import { ConditionBadge } from "@/components/storefront/condition-badge";
 import { SpecsTable } from "@/components/storefront/specs-table";
 import { ProductGrid } from "@/components/storefront/product-grid";
+import { AddToCartButton } from "@/components/storefront/add-to-cart-button";
 
 const naira = new Intl.NumberFormat("en-NG", {
   style: "currency",
@@ -89,13 +90,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </p>
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              disabled={isSoldOut}
-              className="bg-primary text-primary-foreground disabled:bg-muted disabled:text-muted-foreground h-12 flex-1 rounded-md px-6 text-sm font-semibold transition-colors hover:opacity-90 disabled:cursor-not-allowed"
-            >
-              {isSoldOut ? "Unavailable" : "Add to Cart"}
-            </button>
+            <AddToCartButton
+              productId={product.id}
+              slug={product.slug}
+              name={product.name}
+              brand={product.brand}
+              imageUrl={product.images[0]?.url ?? null}
+              unitPrice={Number(product.discountPrice ?? product.price)}
+              stockQuantity={product.stockQuantity}
+              isSoldOut={isSoldOut}
+            />
             {/* WhatsApp "Chat about this product" button ships in Phase 8 */}
           </div>
 
