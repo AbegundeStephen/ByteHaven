@@ -49,6 +49,10 @@ const productInclude = {
   images: { orderBy: { sortOrder: "asc" as const } },
 } satisfies Prisma.ProductInclude;
 
+export type ProductWithRelations = Prisma.ProductGetPayload<{
+  include: typeof productInclude;
+}>;
+
 function buildWhere(filters: ProductFilters = {}): Prisma.ProductWhereInput {
   const where: Prisma.ProductWhereInput = {};
 
@@ -152,6 +156,79 @@ export function getProductBySlug(slug: string) {
     where: { slug },
     include: productInclude,
   });
+}
+
+export function getRelatedProducts(product: ProductWithRelations, take = 4) {
+  return db.product.findMany({
+    where: {
+      categoryId: product.categoryId,
+      id: { not: product.id },
+      deletedAt: null,
+      status: { in: ["active", "sold_out"] },
+    },
+    orderBy: { createdAt: "desc" },
+    take,
+    include: productInclude,
+  });
+}
+
+export async function listBrands() {
+  const rows = await db.product.findMany({
+    where: { deletedAt: null, status: { in: ["active", "sold_out"] } },
+    select: { brand: true },
+    distinct: ["brand"],
+    orderBy: { brand: "asc" },
+  });
+  return rows.map((r) => r.brand);
+}
+
+export type ShopSearchParams = Record<string, string | string[] | undefined>;
+
+const VALID_SORTS: ProductSortOption[] = [
+  "price_asc",
+  "price_desc",
+  "newest",
+  "popularity",
+];
+
+function firstValue(v: string | string[] | undefined): string | undefined {
+  return Array.isArray(v) ? v[0] : v;
+}
+
+/** Parses shop-page URL search params (from ?q=, ?brand=, ?sort=, etc.) into
+ * the filters/sort/page shape listProducts expects. Storefront listings only
+ * ever show active + sold_out (never draft or archived). */
+export function parseShopSearchParams(
+  params: ShopSearchParams,
+  lockedCategorySlug?: string,
+): { filters: ProductFilters; sort: ProductSortOption; page: number } {
+  const brand = firstValue(params.brand)?.split(",").filter(Boolean);
+  const condition = firstValue(params.condition)?.split(",").filter(Boolean) as
+    ProductCondition[] | undefined;
+  const minPrice = firstValue(params.minPrice);
+  const maxPrice = firstValue(params.maxPrice);
+  const sortParam = firstValue(params.sort);
+  const sort = VALID_SORTS.includes(sortParam as ProductSortOption)
+    ? (sortParam as ProductSortOption)
+    : "newest";
+  const page = Number(firstValue(params.page) ?? "1") || 1;
+
+  return {
+    filters: {
+      categorySlug: lockedCategorySlug ?? firstValue(params.category),
+      brand: brand?.length ? brand : undefined,
+      condition: condition?.length ? condition : undefined,
+      statuses: ["active", "sold_out"],
+      minPrice: minPrice ? Number(minPrice) : undefined,
+      maxPrice: maxPrice ? Number(maxPrice) : undefined,
+      ram: firstValue(params.ram),
+      storage: firstValue(params.storage),
+      screenSize: firstValue(params.screenSize),
+      search: firstValue(params.q),
+    },
+    sort,
+    page,
+  };
 }
 
 export function getProductById(id: string) {
