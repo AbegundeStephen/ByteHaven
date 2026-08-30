@@ -61,6 +61,35 @@ npx prisma generate
 npm run db:seed
 ```
 
+## Payments (Paystack)
+
+`lib/paystack.ts` wraps Paystack's Initialize/Verify Transaction REST API and
+webhook signature verification. The flow: `/checkout` creates a pending order
+→ `/checkout/pay/[orderNumber]` calls `POST /api/checkout/[orderNumber]/initialize`
+(server-side, amount pulled from the DB — never trusted from the client) →
+the Paystack Inline JS popup resumes that transaction via its access code →
+on success, `/order-confirmation/[orderNumber]` and the `/api/webhooks/paystack`
+handler both call `confirmOrderPayment()`, which always re-verifies with
+Paystack server-side before marking an order paid (never trusts the popup's
+own "success" callback, per FR-C2/C3). Each payment attempt gets a fresh
+Paystack reference (`<orderNumber>-<timestamp>`), so an abandoned/failed
+attempt can be retried against the _same_ order without creating a duplicate.
+
+### Switching from test to live keys at launch
+
+1. In the Paystack dashboard, flip to **Live Mode** and copy the live
+   `sk_live_...` / `pk_live_...` keys from Settings → API Keys & Webhooks.
+2. Set `PAYSTACK_SECRET_KEY` / `PAYSTACK_PUBLIC_KEY` to the live values in
+   your hosting provider's environment variables (never commit them).
+3. In the live-mode dashboard, add a webhook pointing at
+   `https://<your-domain>/api/webhooks/paystack` (Settings → API Keys &
+   Webhooks → Webhook URL). The signing secret is your live secret key — no
+   separate webhook secret to configure.
+4. Confirm the account has completed Paystack's business verification —
+   live-mode transactions are blocked until that's done.
+5. Test-mode transactions and their orders are entirely separate from live
+   ones; no data migration is needed when switching.
+
 ## Environment variables
 
 See `.env.example` for the full list, with notes on where each one is used.

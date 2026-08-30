@@ -74,7 +74,7 @@ export default function CheckoutPage() {
 
     const data = await res.json();
     clearCart();
-    router.push(`/checkout/pending/${data.orderNumber}`);
+    router.push(`/checkout/pay/${data.orderNumber}`);
   }
 
   if (hydrated && items.length === 0) {
