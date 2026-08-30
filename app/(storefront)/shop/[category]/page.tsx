@@ -29,7 +29,7 @@ export async function generateMetadata({
   const category = await getCategoryBySlug(slug);
   if (!category) return {};
   return {
-    title: `${category.name} | ByteHaven`,
+    title: category.name,
     description:
       category.description ??
       `Shop ${category.name} at ByteHaven — verified pricing and specs.`,

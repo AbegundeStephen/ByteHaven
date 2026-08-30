@@ -12,10 +12,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "ByteHaven — Quality Laptops. Verified Deals. Delivered With Trust.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default:
+      "ByteHaven — Quality Laptops. Verified Deals. Delivered With Trust.",
+    template: "%s | ByteHaven",
+  },
   description:
     "ByteHaven is an online store for laptops and laptop accessories, with secure Paystack checkout and WhatsApp support.",
+  openGraph: {
+    siteName: "ByteHaven",
+    type: "website",
+    locale: "en_NG",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -32,7 +32,7 @@ export function CartLineItem({
             src={item.imageUrl}
             alt={item.name}
             fill
-            unoptimized
+            sizes="80px"
             className="object-cover"
           />
         ) : null}

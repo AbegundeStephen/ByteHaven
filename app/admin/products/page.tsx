@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { listCategories } from "@/lib/categories";
 import { listProducts } from "@/lib/products";
 import { ProductTable } from "@/components/admin/product-table";
+
+export const metadata: Metadata = {
+  title: "Products",
+};
 
 export default async function AdminProductsPage() {
   const [categories, initialResult] = await Promise.all([

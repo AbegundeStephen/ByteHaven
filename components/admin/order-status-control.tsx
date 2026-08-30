@@ -64,6 +64,7 @@ export function OrderStatusControl({
       <select
         value={selected}
         onChange={(e) => setSelected(e.target.value)}
+        aria-label="New order status"
         className="border-input bg-background rounded-md border px-3 py-2 text-sm"
       >
         {validNextStatuses.map((s) => (

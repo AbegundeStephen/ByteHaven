@@ -72,10 +72,14 @@ export default function TrackOrderPage() {
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
         <div>
-          <label className="text-foreground block text-sm font-medium">
+          <label
+            htmlFor="track-order-number"
+            className="text-foreground block text-sm font-medium"
+          >
             Order number
           </label>
           <input
+            id="track-order-number"
             value={orderNumber}
             onChange={(e) => setOrderNumber(e.target.value)}
             placeholder="BH-12345"
@@ -83,10 +87,14 @@ export default function TrackOrderPage() {
           />
         </div>
         <div>
-          <label className="text-foreground block text-sm font-medium">
+          <label
+            htmlFor="track-order-email"
+            className="text-foreground block text-sm font-medium"
+          >
             Email
           </label>
           <input
+            id="track-order-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -95,10 +103,14 @@ export default function TrackOrderPage() {
         </div>
         <p className="text-muted-foreground text-center text-xs">or</p>
         <div>
-          <label className="text-foreground block text-sm font-medium">
+          <label
+            htmlFor="track-order-phone"
+            className="text-foreground block text-sm font-medium"
+          >
             Phone number
           </label>
           <input
+            id="track-order-phone"
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}

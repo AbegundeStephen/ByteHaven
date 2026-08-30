@@ -102,20 +102,28 @@ export default function CheckoutPage() {
           noValidate
         >
           <div>
-            <label className="text-foreground block text-sm font-medium">
+            <label
+              htmlFor="checkout-name"
+              className="text-foreground block text-sm font-medium"
+            >
               Full name
             </label>
             <input
+              id="checkout-name"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
               className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
             />
           </div>
           <div>
-            <label className="text-foreground block text-sm font-medium">
+            <label
+              htmlFor="checkout-email"
+              className="text-foreground block text-sm font-medium"
+            >
               Email
             </label>
             <input
+              id="checkout-email"
               type="email"
               value={customerEmail}
               onChange={(e) => setCustomerEmail(e.target.value)}
@@ -123,10 +131,14 @@ export default function CheckoutPage() {
             />
           </div>
           <div>
-            <label className="text-foreground block text-sm font-medium">
+            <label
+              htmlFor="checkout-phone"
+              className="text-foreground block text-sm font-medium"
+            >
               Phone number
             </label>
             <input
+              id="checkout-phone"
               type="tel"
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
@@ -163,10 +175,14 @@ export default function CheckoutPage() {
 
           {deliveryMethod === "delivery" && (
             <div>
-              <label className="text-foreground block text-sm font-medium">
+              <label
+                htmlFor="checkout-address"
+                className="text-foreground block text-sm font-medium"
+              >
                 Delivery address
               </label>
               <textarea
+                id="checkout-address"
                 value={deliveryAddress}
                 onChange={(e) => setDeliveryAddress(e.target.value)}
                 rows={3}

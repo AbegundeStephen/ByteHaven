@@ -12,7 +12,7 @@ import { ProductGrid } from "@/components/storefront/product-grid";
 import { Pagination } from "@/components/storefront/pagination";
 
 export const metadata: Metadata = {
-  title: "Shop All Products | ByteHaven",
+  title: "Shop All Products",
   description:
     "Browse laptops and laptop accessories at ByteHaven — new, UK-used, and refurbished, with verified pricing and specs.",
 };

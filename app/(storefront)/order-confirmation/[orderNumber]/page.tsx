@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { db } from "@/lib/db";
@@ -8,6 +9,11 @@ import { buildStoreWhatsAppLink } from "@/lib/whatsapp";
 interface OrderConfirmationPageProps {
   params: Promise<{ orderNumber: string }>;
 }
+
+export const metadata: Metadata = {
+  title: "Order Confirmation",
+  robots: { index: false, follow: false },
+};
 
 const naira = new Intl.NumberFormat("en-NG", {
   style: "currency",

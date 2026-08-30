@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import { listCategories } from "@/lib/categories";
 import { ProductForm } from "@/components/admin/product-form";
+
+export const metadata: Metadata = {
+  title: "New Product",
+};
 
 export default async function NewProductPage() {
   const categories = await listCategories();

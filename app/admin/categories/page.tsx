@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import { listCategoriesWithProductCount } from "@/lib/categories";
 import { CategoryManager } from "@/components/admin/category-manager";
+
+export const metadata: Metadata = {
+  title: "Categories",
+};
 
 export default async function AdminCategoriesPage() {
   const categories = await listCategoriesWithProductCount();

@@ -34,9 +34,24 @@ export async function generateMetadata({
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return {};
+
+  const description = product.description.slice(0, 160);
+  const price = Number(product.discountPrice ?? product.price);
+  const image = product.images[0]?.url;
+
   return {
-    title: `${product.name} | ByteHaven`,
-    description: product.description.slice(0, 160),
+    title: product.name,
+    description,
+    openGraph: {
+      title: product.name,
+      description,
+      type: "website",
+      images: image ? [{ url: image, alt: product.name }] : undefined,
+    },
+    other: {
+      "product:price:amount": String(price),
+      "product:price:currency": "NGN",
+    },
   };
 }
 
@@ -55,8 +70,34 @@ export default async function ProductPage({ params }: ProductPageProps) {
     `Hi, I'm interested in the ${product.name} listed on ByteHaven (${productLink}).`,
   );
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.images.map((img) => img.url),
+    brand: { "@type": "Brand", name: product.brand },
+    offers: {
+      "@type": "Offer",
+      url: productLink,
+      priceCurrency: "NGN",
+      price: Number(product.discountPrice ?? product.price),
+      availability: isSoldOut
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
+      itemCondition:
+        product.condition === "new"
+          ? "https://schema.org/NewCondition"
+          : "https://schema.org/UsedCondition",
+    },
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="grid gap-8 lg:grid-cols-2">
         <ImageGallery images={product.images} alt={product.name} />
 

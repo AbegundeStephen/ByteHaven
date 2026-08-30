@@ -156,10 +156,14 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
         className="border-border bg-card flex flex-col gap-3 rounded-xl border p-4 sm:flex-row sm:items-end"
       >
         <div className="flex-1">
-          <label className="text-foreground block text-sm font-medium">
+          <label
+            htmlFor="new-category-name"
+            className="text-foreground block text-sm font-medium"
+          >
             New category name
           </label>
           <input
+            id="new-category-name"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
@@ -167,10 +171,14 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
           />
         </div>
         <div className="flex-1">
-          <label className="text-foreground block text-sm font-medium">
+          <label
+            htmlFor="new-category-description"
+            className="text-foreground block text-sm font-medium"
+          >
             Description (optional)
           </label>
           <input
+            id="new-category-description"
             value={newDescription}
             onChange={(e) => setNewDescription(e.target.value)}
             className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
@@ -232,12 +240,14 @@ export function CategoryManager({ initialCategories }: CategoryManagerProps) {
                       <input
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
+                        aria-label="Category name"
                         className="border-input bg-background w-full rounded-md border px-2 py-1 text-sm"
                       />
                       <input
                         value={editDescription}
                         onChange={(e) => setEditDescription(e.target.value)}
                         placeholder="Description"
+                        aria-label="Category description"
                         className="border-input bg-background w-full rounded-md border px-2 py-1 text-sm"
                       />
                     </div>

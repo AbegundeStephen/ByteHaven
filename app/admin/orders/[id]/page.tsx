@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getOrderById, getValidNextStatuses } from "@/lib/orders";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
@@ -11,6 +12,14 @@ const naira = new Intl.NumberFormat("en-NG", {
 
 interface OrderDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: OrderDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const order = await getOrderById(id);
+  return { title: order ? `Order ${order.orderNumber}` : "Order" };
 }
 
 export default async function AdminOrderDetailPage({

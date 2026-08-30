@@ -65,10 +65,14 @@ export function ShopFilters({
   const content = (
     <div className="space-y-6">
       <div>
-        <label className="text-foreground block text-sm font-medium">
+        <label
+          htmlFor="filter-search"
+          className="text-foreground block text-sm font-medium"
+        >
           Search
         </label>
         <input
+          id="filter-search"
           defaultValue={searchParams.get("q") ?? ""}
           onChange={(e) => updateParams({ q: e.target.value || null })}
           placeholder="Search products…"
@@ -78,10 +82,14 @@ export function ShopFilters({
 
       {!lockedCategorySlug && (
         <div>
-          <label className="text-foreground block text-sm font-medium">
+          <label
+            htmlFor="filter-category"
+            className="text-foreground block text-sm font-medium"
+          >
             Category
           </label>
           <select
+            id="filter-category"
             defaultValue=""
             onChange={(e) => handleCategoryChange(e.target.value)}
             className="border-input bg-background mt-1 w-full rounded-md border px-3 py-2 text-sm"
@@ -139,7 +147,11 @@ export function ShopFilters({
       <div>
         <p className="text-foreground text-sm font-medium">Price range (₦)</p>
         <div className="mt-2 flex items-center gap-2">
+          <label htmlFor="filter-min-price" className="sr-only">
+            Minimum price
+          </label>
           <input
+            id="filter-min-price"
             type="number"
             min="0"
             placeholder="Min"
@@ -148,7 +160,11 @@ export function ShopFilters({
             className="border-input bg-background w-full rounded-md border px-3 py-2 text-sm"
           />
           <span className="text-muted-foreground">–</span>
+          <label htmlFor="filter-max-price" className="sr-only">
+            Maximum price
+          </label>
           <input
+            id="filter-max-price"
             type="number"
             min="0"
             placeholder="Max"
@@ -160,8 +176,14 @@ export function ShopFilters({
       </div>
 
       <div>
-        <label className="text-foreground block text-sm font-medium">RAM</label>
+        <label
+          htmlFor="filter-ram"
+          className="text-foreground block text-sm font-medium"
+        >
+          RAM
+        </label>
         <input
+          id="filter-ram"
           defaultValue={searchParams.get("ram") ?? ""}
           onBlur={(e) => updateParams({ ram: e.target.value || null })}
           placeholder="e.g. 16GB"
@@ -170,10 +192,14 @@ export function ShopFilters({
       </div>
 
       <div>
-        <label className="text-foreground block text-sm font-medium">
+        <label
+          htmlFor="filter-storage"
+          className="text-foreground block text-sm font-medium"
+        >
           Storage
         </label>
         <input
+          id="filter-storage"
           defaultValue={searchParams.get("storage") ?? ""}
           onBlur={(e) => updateParams({ storage: e.target.value || null })}
           placeholder="e.g. 512GB"
@@ -182,10 +208,14 @@ export function ShopFilters({
       </div>
 
       <div>
-        <label className="text-foreground block text-sm font-medium">
+        <label
+          htmlFor="filter-screen-size"
+          className="text-foreground block text-sm font-medium"
+        >
           Screen size
         </label>
         <input
+          id="filter-screen-size"
           defaultValue={searchParams.get("screenSize") ?? ""}
           onBlur={(e) => updateParams({ screenSize: e.target.value || null })}
           placeholder="e.g. 15.6-inch"

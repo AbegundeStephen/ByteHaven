@@ -133,7 +133,6 @@ export function ImageUploader({ images, onChange }: ImageUploaderProps) {
                 width={160}
                 height={120}
                 className="h-28 w-full object-cover"
-                unoptimized
               />
               {img.isPrimary && (
                 <span className="bg-accent text-accent-foreground absolute top-1 left-1 rounded-full px-2 py-0.5 text-xs font-medium">

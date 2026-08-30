@@ -28,7 +28,6 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
           src={active.url}
           alt={alt}
           fill
-          unoptimized
           priority
           className="object-cover"
           sizes="(max-width: 1024px) 100vw, 50vw"
@@ -75,7 +74,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
                 src={img.url}
                 alt=""
                 fill
-                unoptimized
+                sizes="64px"
                 className="object-cover"
               />
             </button>

@@ -114,6 +114,7 @@ export function ProductTable({ categories, initialResult }: ProductTableProps) {
             setSearch(e.target.value);
           }}
           placeholder="Search name, brand, description…"
+          aria-label="Search products"
           className="border-input bg-background focus:ring-ring min-w-[220px] flex-1 rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
         />
         <select
@@ -122,6 +123,7 @@ export function ProductTable({ categories, initialResult }: ProductTableProps) {
             setPage(1);
             setCategoryId(e.target.value);
           }}
+          aria-label="Filter by category"
           className="border-input bg-background rounded-md border px-3 py-2 text-sm"
         >
           <option value="">All categories</option>
@@ -137,6 +139,7 @@ export function ProductTable({ categories, initialResult }: ProductTableProps) {
             setPage(1);
             setStatus(e.target.value);
           }}
+          aria-label="Filter by status"
           className="border-input bg-background rounded-md border px-3 py-2 text-sm"
         >
           <option value="">All statuses</option>
@@ -147,6 +150,7 @@ export function ProductTable({ categories, initialResult }: ProductTableProps) {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
+          aria-label="Sort products"
           className="border-input bg-background rounded-md border px-3 py-2 text-sm"
         >
           <option value="newest">Newest</option>
@@ -188,7 +192,6 @@ export function ProductTable({ categories, initialResult }: ProductTableProps) {
                         width={48}
                         height={48}
                         className="h-12 w-12 rounded-md object-cover"
-                        unoptimized
                       />
                     ) : (
                       <div className="bg-muted h-12 w-12 rounded-md" />
@@ -229,6 +232,7 @@ export function ProductTable({ categories, initialResult }: ProductTableProps) {
                       value={p.status}
                       disabled={busyId === p.id}
                       onChange={(e) => handleStatusToggle(p.id, e.target.value)}
+                      aria-label={`Status for ${p.name}`}
                       className="border-input bg-background rounded-md border px-2 py-1 text-xs"
                     >
                       <option value="active">Active</option>

@@ -33,7 +33,10 @@ const categories = [
 ] as const;
 
 function placeholderImage(seed: string, i: number) {
-  return `https://placehold.co/800x600/0B2447/FFFFFF?text=${encodeURIComponent(seed)}+${i}`;
+  // .png format, not the default SVG — next/image's optimizer blocks SVG
+  // optimization by default (a deliberate XSS-safety default), and real
+  // uploaded product photos will never be SVG either.
+  return `https://placehold.co/800x600/0B2447/FFFFFF.png?text=${encodeURIComponent(seed)}+${i}`;
 }
 
 const products = [

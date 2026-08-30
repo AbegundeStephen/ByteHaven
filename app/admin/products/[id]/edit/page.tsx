@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { listCategories } from "@/lib/categories";
 import { getProductById } from "@/lib/products";
@@ -8,6 +9,14 @@ import {
 
 interface EditProductPageProps {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: EditProductPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProductById(id);
+  return { title: product ? `Edit ${product.name}` : "Edit Product" };
 }
 
 export default async function EditProductPage({

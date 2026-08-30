@@ -13,7 +13,7 @@ export function CartButton() {
     <button
       type="button"
       onClick={openDrawer}
-      className="text-primary hover:bg-muted relative inline-flex h-10 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors"
+      className="text-primary hover:bg-muted relative inline-flex h-11 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors"
       aria-label={`View cart, ${count} item${count === 1 ? "" : "s"}`}
     >
       Cart

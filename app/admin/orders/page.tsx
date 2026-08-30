@@ -1,5 +1,10 @@
+import type { Metadata } from "next";
 import { listOrders } from "@/lib/orders";
 import { OrderTable } from "@/components/admin/order-table";
+
+export const metadata: Metadata = {
+  title: "Orders",
+};
 
 export default async function AdminOrdersPage() {
   const initialResult = await listOrders({ pageSize: 20 });
