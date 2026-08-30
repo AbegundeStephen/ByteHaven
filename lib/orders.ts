@@ -1,5 +1,9 @@
 import { db } from "@/lib/db";
-import { DeliveryMethod, Prisma } from "@/lib/generated/prisma/client";
+import {
+  DeliveryMethod,
+  OrderStatus,
+  Prisma,
+} from "@/lib/generated/prisma/client";
 
 export interface CreateOrderItemInput {
   productId: string;
@@ -105,4 +109,89 @@ export async function getOrderByNumberAndContact(
 
   if (!emailMatches && !phoneMatches) return null;
   return order;
+}
+
+export interface OrderFilters {
+  status?: OrderStatus;
+  dateFrom?: Date;
+  dateTo?: Date;
+}
+
+export interface ListOrdersOptions {
+  filters?: OrderFilters;
+  page?: number;
+  pageSize?: number;
+}
+
+export async function listOrders(options: ListOrdersOptions = {}) {
+  const page = Math.max(1, options.page ?? 1);
+  const pageSize = Math.min(100, Math.max(1, options.pageSize ?? 20));
+  const filters = options.filters ?? {};
+
+  const where: Prisma.OrderWhereInput = {};
+  if (filters.status) where.status = filters.status;
+  if (filters.dateFrom || filters.dateTo) {
+    where.createdAt = {
+      ...(filters.dateFrom ? { gte: filters.dateFrom } : {}),
+      ...(filters.dateTo ? { lte: filters.dateTo } : {}),
+    };
+  }
+
+  const [items, total] = await Promise.all([
+    db.order.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    db.order.count({ where }),
+  ]);
+
+  return {
+    items,
+    total,
+    page,
+    pageSize,
+    totalPages: Math.max(1, Math.ceil(total / pageSize)),
+  };
+}
+
+export function getOrderById(id: string) {
+  return db.order.findUnique({
+    where: { id },
+    include: { items: true },
+  });
+}
+
+/** Valid forward transitions per status (SRS 4.7/FR-G3) — no skipping ahead
+ * (e.g. pending can't jump straight to delivered), and delivered/cancelled
+ * are terminal. Cancellation is allowed from any non-terminal state. */
+const ORDER_STATUS_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+  pending: ["paid", "cancelled"],
+  paid: ["processing", "cancelled"],
+  processing: ["shipped", "cancelled"],
+  shipped: ["delivered", "cancelled"],
+  delivered: [],
+  cancelled: [],
+};
+
+export function getValidNextStatuses(current: OrderStatus): OrderStatus[] {
+  return ORDER_STATUS_TRANSITIONS[current];
+}
+
+export class InvalidOrderStatusTransitionError extends Error {
+  constructor(from: OrderStatus, to: OrderStatus) {
+    super(`Cannot move an order from "${from}" to "${to}".`);
+  }
+}
+
+export async function updateOrderStatus(id: string, newStatus: OrderStatus) {
+  const order = await db.order.findUnique({ where: { id } });
+  if (!order) throw new Error("Order not found");
+
+  if (!ORDER_STATUS_TRANSITIONS[order.status].includes(newStatus)) {
+    throw new InvalidOrderStatusTransitionError(order.status, newStatus);
+  }
+
+  return db.order.update({ where: { id }, data: { status: newStatus } });
 }

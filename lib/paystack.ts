@@ -1,5 +1,9 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { db } from "@/lib/db";
+import {
+  sendAdminOrderAlertEmail,
+  sendOrderConfirmationEmail,
+} from "@/lib/email";
 
 const PAYSTACK_BASE_URL = "https://api.paystack.co";
 
@@ -124,6 +128,7 @@ export async function confirmOrderPayment(
 ): Promise<ConfirmPaymentResult> {
   const order = await db.order.findFirst({
     where: { paymentReference: reference },
+    include: { items: true },
   });
   if (!order) return { outcome: "order_not_found" };
   if (order.paymentStatus === "success") {
@@ -145,6 +150,25 @@ export async function confirmOrderPayment(
       where: { id: order.id },
       data: { paymentStatus: "success", status: "paid" },
     });
+
+    // Best-effort — a failed email must never undo a confirmed payment.
+    const [confirmationResult, alertResult] = await Promise.allSettled([
+      sendOrderConfirmationEmail(order),
+      sendAdminOrderAlertEmail(order),
+    ]);
+    if (confirmationResult.status === "rejected") {
+      console.error(
+        `Order confirmation email failed for ${order.orderNumber}:`,
+        confirmationResult.reason,
+      );
+    }
+    if (alertResult.status === "rejected") {
+      console.error(
+        `Admin order alert email failed for ${order.orderNumber}:`,
+        alertResult.reason,
+      );
+    }
+
     return { outcome: "confirmed", orderNumber: order.orderNumber };
   }
 

@@ -90,6 +90,20 @@ attempt can be retried against the _same_ order without creating a duplicate.
 5. Test-mode transactions and their orders are entirely separate from live
    ones; no data migration is needed when switching.
 
+## Transactional email (Resend)
+
+`lib/email.ts` sends two emails whenever `confirmOrderPayment()` marks an
+order paid (best-effort — a failed email never undoes a confirmed payment,
+see `lib/paystack.ts`): an order confirmation to the buyer and a new-paid-
+order alert to `ADMIN_EMAIL`.
+
+**Resend's sandbox mode** (no verified domain) only allows sending _to_ the
+email address the Resend account was signed up with — sending to any other
+address (including a placeholder `ADMIN_EMAIL` or a real buyer's email)
+returns a 403. That's expected in dev; before launch, verify a real domain
+at resend.com/domains, switch `EMAIL_FROM_ADDRESS` to use it, and set
+`ADMIN_EMAIL` to Akintayo's real inbox.
+
 ## Environment variables
 
 See `.env.example` for the full list, with notes on where each one is used.
