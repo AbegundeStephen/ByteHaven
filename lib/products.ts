@@ -4,12 +4,22 @@ import {
   ProductCondition,
   ProductStatus,
 } from "@/lib/generated/prisma/client";
+import { deleteProductImage } from "@/lib/storage";
+
+export const LOW_STOCK_THRESHOLD = 3;
 
 export type ProductSortOption =
-  "price_asc" | "price_desc" | "newest" | "popularity";
+  | "price_asc"
+  | "price_desc"
+  | "newest"
+  | "popularity"
+  | "stock_asc"
+  | "stock_desc"
+  | "name_asc";
 
 export interface ProductFilters {
   categorySlug?: string;
+  categoryId?: string;
   brand?: string[];
   condition?: ProductCondition[];
   statuses?: ProductStatus[];
@@ -23,6 +33,8 @@ export interface ProductFilters {
   screenSize?: string;
   /** Matches against name, brand, and description. */
   search?: string;
+  /** Admin use only — include soft-deleted (archived) products. */
+  includeDeleted?: boolean;
 }
 
 export interface ListProductsOptions {
@@ -40,8 +52,14 @@ const productInclude = {
 function buildWhere(filters: ProductFilters = {}): Prisma.ProductWhereInput {
   const where: Prisma.ProductWhereInput = {};
 
+  if (!filters.includeDeleted) {
+    where.deletedAt = null;
+  }
   if (filters.categorySlug) {
     where.category = { slug: filters.categorySlug };
+  }
+  if (filters.categoryId) {
+    where.categoryId = filters.categoryId;
   }
   if (filters.brand?.length) {
     where.brand = { in: filters.brand };
@@ -91,6 +109,12 @@ function buildOrderBy(
       return { price: "desc" };
     case "popularity":
       return { orderItems: { _count: "desc" } };
+    case "stock_asc":
+      return { stockQuantity: "asc" };
+    case "stock_desc":
+      return { stockQuantity: "desc" };
+    case "name_asc":
+      return { name: "asc" };
     case "newest":
     default:
       return { createdAt: "desc" };
@@ -128,4 +152,181 @@ export function getProductBySlug(slug: string) {
     where: { slug },
     include: productInclude,
   });
+}
+
+export function getProductById(id: string) {
+  return db.product.findUnique({
+    where: { id },
+    include: productInclude,
+  });
+}
+
+export function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+/** Appends -2, -3, ... to a slug until it's unique, excluding excludeId
+ * (the product being updated, so it doesn't collide with itself). */
+export async function generateUniqueProductSlug(
+  name: string,
+  excludeId?: string,
+) {
+  const base = slugify(name);
+  let candidate = base;
+  let attempt = 1;
+  for (;;) {
+    const existing = await db.product.findUnique({
+      where: { slug: candidate },
+      select: { id: true },
+    });
+    if (!existing || existing.id === excludeId) return candidate;
+    attempt++;
+    candidate = `${base}-${attempt}`;
+  }
+}
+
+export interface ProductImageInput {
+  url: string;
+  isPrimary: boolean;
+  sortOrder: number;
+}
+
+export interface ProductInput {
+  name: string;
+  brand: string;
+  categoryId: string;
+  condition: ProductCondition;
+  price: number;
+  discountPrice: number | null;
+  stockQuantity: number;
+  specs: Record<string, string>;
+  description: string;
+  status: ProductStatus;
+  images: ProductImageInput[];
+}
+
+function normalizeImages(images: ProductImageInput[]) {
+  if (images.length === 0) return [];
+  const hasPrimary = images.some((img) => img.isPrimary);
+  return images.map((img, i) => ({
+    url: img.url,
+    isPrimary: hasPrimary ? img.isPrimary : i === 0,
+    sortOrder: i,
+  }));
+}
+
+export async function createProduct(input: ProductInput) {
+  const slug = await generateUniqueProductSlug(input.name);
+  const images = normalizeImages(input.images);
+
+  return db.product.create({
+    data: {
+      name: input.name,
+      slug,
+      brand: input.brand,
+      categoryId: input.categoryId,
+      condition: input.condition,
+      price: input.price,
+      discountPrice: input.discountPrice,
+      stockQuantity: input.stockQuantity,
+      specs: input.specs,
+      description: input.description,
+      status: input.status,
+      images: { create: images },
+    },
+    include: productInclude,
+  });
+}
+
+export async function updateProduct(id: string, input: ProductInput) {
+  const current = await db.product.findUnique({
+    where: { id },
+    select: {
+      name: true,
+      slug: true,
+      images: { select: { url: true } },
+    },
+  });
+  if (!current) throw new Error("Product not found");
+
+  const slug =
+    current.name === input.name
+      ? current.slug
+      : await generateUniqueProductSlug(input.name, id);
+  const images = normalizeImages(input.images);
+  const newUrls = new Set(images.map((img) => img.url));
+  const removedUrls = current.images
+    .map((img) => img.url)
+    .filter((url) => !newUrls.has(url));
+
+  const updated = await db.$transaction(async (tx) => {
+    await tx.productImage.deleteMany({ where: { productId: id } });
+    return tx.product.update({
+      where: { id },
+      data: {
+        name: input.name,
+        slug,
+        brand: input.brand,
+        categoryId: input.categoryId,
+        condition: input.condition,
+        price: input.price,
+        discountPrice: input.discountPrice,
+        stockQuantity: input.stockQuantity,
+        specs: input.specs,
+        description: input.description,
+        status: input.status,
+        images: { create: images },
+      },
+      include: productInclude,
+    });
+  });
+
+  await cleanupRemovedImages(removedUrls);
+  return updated;
+}
+
+/** Best-effort storage cleanup — failures here shouldn't fail the product
+ * mutation that already committed in the database. */
+async function cleanupRemovedImages(urls: string[]) {
+  if (urls.length === 0) return;
+  await Promise.allSettled(urls.map((url) => deleteProductImage(url)));
+}
+
+export async function setProductStatus(id: string, status: ProductStatus) {
+  return db.product.update({ where: { id }, data: { status } });
+}
+
+export type DeleteProductResult = "deleted" | "archived";
+
+/** Hard-deletes a product with no order history, or soft-deletes (archives)
+ * one that has existing orders so historical orders are never broken
+ * (FR-F4). */
+export async function deleteOrArchiveProduct(
+  id: string,
+): Promise<DeleteProductResult> {
+  const orderItemCount = await db.orderItem.count({
+    where: { productId: id },
+  });
+
+  if (orderItemCount > 0) {
+    await db.product.update({
+      where: { id },
+      data: { deletedAt: new Date(), status: "sold_out" },
+    });
+    return "archived";
+  }
+
+  const product = await db.product.findUnique({
+    where: { id },
+    select: { images: { select: { url: true } } },
+  });
+  await db.product.delete({ where: { id } });
+  if (product) {
+    await cleanupRemovedImages(product.images.map((img) => img.url));
+  }
+  return "deleted";
 }
