@@ -1,7 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// ByteHaven data model — SRS Section 7.
+// Prisma fields use idiomatic camelCase; @map/@@map keep the underlying
+// Postgres columns/tables snake_case to match the SRS field names.
 
 generator client {
   provider = "prisma-client"
@@ -10,4 +9,131 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum ProductCondition {
+  new
+  uk_used
+  refurbished
+}
+
+enum ProductStatus {
+  active
+  draft
+  sold_out
+}
+
+enum DeliveryMethod {
+  delivery
+  pickup
+}
+
+enum OrderStatus {
+  pending
+  paid
+  processing
+  shipped
+  delivered
+  cancelled
+}
+
+enum PaymentStatus {
+  pending
+  success
+  failed
+}
+
+model AdminUser {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  lastLoginAt  DateTime? @map("last_login_at")
+
+  @@map("admin_users")
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String?
+  sortOrder   Int       @default(0) @map("sort_order")
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            String           @id @default(uuid())
+  name          String
+  slug          String           @unique
+  brand         String
+  categoryId    String           @map("category_id")
+  category      Category         @relation(fields: [categoryId], references: [id])
+  condition     ProductCondition
+  price         Decimal          @db.Decimal(12, 2)
+  discountPrice Decimal?         @map("discount_price") @db.Decimal(12, 2)
+  stockQuantity Int              @default(0) @map("stock_quantity")
+  specs         Json
+  description   String
+  status        ProductStatus    @default(draft)
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+  images        ProductImage[]
+  orderItems    OrderItem[]
+
+  @@index([categoryId])
+  @@index([status])
+  @@map("products")
+}
+
+model ProductImage {
+  id        String  @id @default(uuid())
+  productId String  @map("product_id")
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  isPrimary Boolean @default(false) @map("is_primary")
+  sortOrder Int     @default(0) @map("sort_order")
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+model Order {
+  id               String         @id @default(uuid())
+  orderNumber      String         @unique @map("order_number")
+  customerName     String         @map("customer_name")
+  customerEmail    String         @map("customer_email")
+  customerPhone    String         @map("customer_phone")
+  deliveryMethod   DeliveryMethod @map("delivery_method")
+  deliveryAddress  String?        @map("delivery_address")
+  subtotal         Decimal        @db.Decimal(12, 2)
+  total            Decimal        @db.Decimal(12, 2)
+  status           OrderStatus    @default(pending)
+  paymentReference String?        @map("payment_reference")
+  paymentStatus    PaymentStatus  @default(pending) @map("payment_status")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+  items            OrderItem[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id                  String  @id @default(uuid())
+  orderId             String  @map("order_id")
+  order               Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId           String  @map("product_id")
+  product             Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+  productNameSnapshot String  @map("product_name_snapshot")
+  unitPriceSnapshot   Decimal @map("unit_price_snapshot") @db.Decimal(12, 2)
+  quantity            Int
+  lineTotal           Decimal @map("line_total") @db.Decimal(12, 2)
+
+  @@index([orderId])
+  @@map("order_items")
 }

@@ -7,8 +7,11 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // Migrate/introspect need a direct (non-pooled) connection — PgBouncer's
+    // transaction mode doesn't support the DDL/advisory-lock behavior Migrate needs.
+    url: process.env["DIRECT_URL"],
   },
 });
