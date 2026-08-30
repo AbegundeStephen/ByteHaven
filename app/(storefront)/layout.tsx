@@ -1,6 +1,7 @@
 import { Header } from "@/components/storefront/header";
 import { Footer } from "@/components/storefront/footer";
 import { CartDrawer } from "@/components/storefront/cart-drawer";
+import { WhatsAppFloatButton } from "@/components/storefront/whatsapp-float-button";
 
 export default function StorefrontLayout({
   children,
@@ -13,6 +14,7 @@ export default function StorefrontLayout({
       <main className="flex-1">{children}</main>
       <Footer />
       <CartDrawer />
+      <WhatsAppFloatButton />
     </>
   );
 }

@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { confirmOrderPayment } from "@/lib/paystack";
+import { WhatsAppCtaButton } from "@/components/storefront/whatsapp-cta-button";
+import { buildStoreWhatsAppLink } from "@/lib/whatsapp";
 
 interface OrderConfirmationPageProps {
   params: Promise<{ orderNumber: string }>;
@@ -60,6 +62,10 @@ export default async function OrderConfirmationPage({
     );
   }
 
+  const whatsappLink = buildStoreWhatsAppLink(
+    `Hi, I just placed order ${order.orderNumber} on ByteHaven and wanted to confirm delivery details.`,
+  );
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="border-border bg-card rounded-xl border p-8">
@@ -101,14 +107,21 @@ export default async function OrderConfirmationPage({
           </p>
         </div>
 
-        {/* WhatsApp "Confirm your order" button ships in Phase 8 */}
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          {whatsappLink && (
+            <WhatsAppCtaButton
+              link={whatsappLink}
+              label="Confirm on WhatsApp"
+            />
+          )}
 
-        <Link
-          href="/shop"
-          className="border-input hover:bg-muted mt-6 inline-flex h-11 items-center justify-center rounded-md border px-6 text-sm font-medium"
-        >
-          Continue Shopping
-        </Link>
+          <Link
+            href="/shop"
+            className="border-input hover:bg-muted inline-flex h-11 items-center justify-center rounded-md border px-6 text-sm font-medium"
+          >
+            Continue Shopping
+          </Link>
+        </div>
       </div>
     </div>
   );

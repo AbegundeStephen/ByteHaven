@@ -7,6 +7,8 @@ import { ConditionBadge } from "@/components/storefront/condition-badge";
 import { SpecsTable } from "@/components/storefront/specs-table";
 import { ProductGrid } from "@/components/storefront/product-grid";
 import { AddToCartButton } from "@/components/storefront/add-to-cart-button";
+import { WhatsAppCtaButton } from "@/components/storefront/whatsapp-cta-button";
+import { buildStoreWhatsAppLink, getSiteUrl } from "@/lib/whatsapp";
 
 const naira = new Intl.NumberFormat("en-NG", {
   style: "currency",
@@ -47,6 +49,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const isSoldOut =
     product.status === "sold_out" || product.stockQuantity === 0;
   const hasDiscount = product.discountPrice !== null;
+
+  const productLink = `${getSiteUrl()}/product/${product.slug}`;
+  const whatsappLink = buildStoreWhatsAppLink(
+    `Hi, I'm interested in the ${product.name} listed on ByteHaven (${productLink}).`,
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
@@ -100,7 +107,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
               stockQuantity={product.stockQuantity}
               isSoldOut={isSoldOut}
             />
-            {/* WhatsApp "Chat about this product" button ships in Phase 8 */}
+            {whatsappLink && (
+              <WhatsAppCtaButton link={whatsappLink} label="Chat on WhatsApp" />
+            )}
           </div>
 
           <div className="mt-8">

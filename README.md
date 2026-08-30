@@ -104,6 +104,31 @@ returns a 403. That's expected in dev; before launch, verify a real domain
 at resend.com/domains, switch `EMAIL_FROM_ADDRESS` to use it, and set
 `ADMIN_EMAIL` to Akintayo's real inbox.
 
+## WhatsApp
+
+`lib/whatsapp.ts` builds `wa.me` click-to-chat links — free, no API keys,
+no approval process. Three entry points: a site-wide floating button
+(`components/storefront/whatsapp-float-button.tsx`), a per-product "Chat on
+WhatsApp" button pre-filled with the product name and link, and a
+"Confirm on WhatsApp" button on the paid order-confirmation page pre-filled
+with the order number. All of it reads `WHATSAPP_BUSINESS_NUMBER`; every
+button renders nothing (not a broken link) if that env var is unset.
+
+### Future: WhatsApp Business Cloud API (Meta) — post-launch, not built
+
+This MVP deliberately stops at click-to-chat links. A later phase could add
+Meta's WhatsApp Business Cloud API for _automated_ messages — e.g. pinging
+Akintayo the moment an order is paid, or auto-notifying a buyer when their
+order ships — without either party needing to open a chat first. That
+requires: a Meta Business/WhatsApp Business Platform account and business
+verification, a permanent access token and phone number ID from Meta,
+pre-approved message templates (Meta rejects free-form outbound messages
+outside a 24-hour customer-service window), and a webhook endpoint (similar
+in shape to `/api/webhooks/paystack`) to receive delivery/read receipts and
+inbound replies. None of that exists yet — the current `lib/whatsapp.ts`
+link-builder approach would stay as a fallback either way, since it needs no
+approval and never breaks.
+
 ## Environment variables
 
 See `.env.example` for the full list, with notes on where each one is used.
