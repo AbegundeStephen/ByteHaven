@@ -80,6 +80,17 @@ export function ProductForm({
       setError("Name, brand, and category are required.");
       return;
     }
+    if (!values.price || Number(values.price) <= 0) {
+      setError("Price is required and must be greater than 0.");
+      return;
+    }
+    if (
+      values.discountPrice &&
+      Number(values.discountPrice) >= Number(values.price)
+    ) {
+      setError("Discount price must be less than the regular price.");
+      return;
+    }
     if (
       !values.processor ||
       !values.ram ||
@@ -98,7 +109,10 @@ export function ProductForm({
       categoryId: values.categoryId,
       condition: values.condition,
       price: Number(values.price),
-      discountPrice: values.discountPrice ? Number(values.discountPrice) : null,
+      discountPrice:
+        values.discountPrice && Number(values.discountPrice) > 0
+          ? Number(values.discountPrice)
+          : null,
       stockQuantity: Number(values.stockQuantity),
       specs: {
         processor: values.processor,
