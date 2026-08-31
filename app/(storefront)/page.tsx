@@ -15,8 +15,8 @@ export default async function Home() {
 
   return (
     <div>
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="bg-primary text-primary-foreground rounded-2xl px-6 py-16 sm:px-12">
+      <section className="mx-auto max-w-7xl px-4 pt-6 pb-12 sm:px-6 sm:pt-8 sm:pb-16 lg:px-8">
+        <div className="bg-primary text-primary-foreground rounded-2xl px-6 py-12 sm:px-12 sm:py-16">
           <p className="text-accent text-sm font-semibold tracking-wide uppercase">
             Trusted laptop marketplace
           </p>
