@@ -59,7 +59,7 @@ export default async function OrderConfirmationPage({
           </p>
           <Link
             href={`/checkout/pay/${order.orderNumber}`}
-            className="bg-primary text-primary-foreground mt-6 inline-flex h-11 items-center justify-center rounded-md px-6 text-sm font-semibold hover:opacity-90"
+            className="bg-primary text-primary-foreground mt-6 inline-flex h-11 items-center justify-center rounded-lg px-6 text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
           >
             Retry Payment
           </Link>
@@ -74,11 +74,25 @@ export default async function OrderConfirmationPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="border-border bg-card rounded-xl border p-8">
-        <p className="text-secondary text-sm font-semibold tracking-wide uppercase">
+      <div className="border-border bg-card rounded-xl border p-8 shadow-sm">
+        <div className="bg-secondary/10 flex h-14 w-14 items-center justify-center rounded-full">
+          <svg
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+            className="text-secondary h-7 w-7"
+          >
+            <path
+              fillRule="evenodd"
+              d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.5 7.6a1 1 0 0 1-1.42.006l-3.5-3.5a1 1 0 1 1 1.414-1.414l2.797 2.796 6.79-6.89a1 1 0 0 1 1.413-.012Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+        <p className="text-secondary mt-4 text-sm font-semibold tracking-wide uppercase">
           Payment successful
         </p>
-        <h1 className="text-foreground mt-2 text-2xl font-bold">
+        <h1 className="text-foreground mt-1 text-2xl font-bold">
           Order {order.orderNumber}
         </h1>
         <p className="text-muted-foreground mt-2 text-sm">
@@ -123,7 +137,7 @@ export default async function OrderConfirmationPage({
 
           <Link
             href="/shop"
-            className="border-input hover:bg-muted inline-flex h-11 items-center justify-center rounded-md border px-6 text-sm font-medium"
+            className="border-input hover:bg-muted inline-flex h-11 items-center justify-center rounded-lg border px-6 text-sm font-medium transition-colors"
           >
             Continue Shopping
           </Link>

@@ -26,7 +26,7 @@ export function SortSelect() {
     <select
       defaultValue={searchParams.get("sort") ?? "newest"}
       onChange={(e) => handleChange(e.target.value)}
-      className="border-input bg-background rounded-md border px-3 py-2 text-sm"
+      className="border-input bg-background focus:ring-ring rounded-lg border px-3 py-2 text-sm shadow-sm transition-shadow outline-none focus:ring-2"
       aria-label="Sort products"
     >
       {OPTIONS.map((o) => (

@@ -28,6 +28,18 @@ const STATUS_LABELS: Record<string, string> = {
   cancelled: "Cancelled",
 };
 
+const STATUS_STYLES: Record<string, string> = {
+  pending: "bg-muted text-muted-foreground",
+  paid: "bg-secondary/10 text-secondary",
+  processing: "bg-accent/20 text-accent-foreground",
+  shipped: "bg-accent/20 text-accent-foreground",
+  delivered: "bg-secondary/10 text-secondary",
+  cancelled: "bg-destructive/10 text-destructive",
+};
+
+const inputClass =
+  "border-input bg-background focus:ring-ring mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none transition-shadow focus:ring-2";
+
 export default function TrackOrderPage() {
   const [orderNumber, setOrderNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -70,7 +82,11 @@ export default function TrackOrderPage() {
         checkout.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
+      <form
+        onSubmit={handleSubmit}
+        className="border-border bg-card mt-6 space-y-4 rounded-xl border p-6 shadow-sm"
+        noValidate
+      >
         <div>
           <label
             htmlFor="track-order-number"
@@ -83,7 +99,7 @@ export default function TrackOrderPage() {
             value={orderNumber}
             onChange={(e) => setOrderNumber(e.target.value)}
             placeholder="BH-12345"
-            className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+            className={inputClass}
           />
         </div>
         <div>
@@ -98,10 +114,14 @@ export default function TrackOrderPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+            className={inputClass}
           />
         </div>
-        <p className="text-muted-foreground text-center text-xs">or</p>
+        <div className="flex items-center gap-3">
+          <span className="border-border h-px flex-1 border-t" />
+          <span className="text-muted-foreground text-xs">or</span>
+          <span className="border-border h-px flex-1 border-t" />
+        </div>
         <div>
           <label
             htmlFor="track-order-phone"
@@ -115,7 +135,7 @@ export default function TrackOrderPage() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="08012345678"
-            className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+            className={inputClass}
           />
         </div>
 
@@ -126,18 +146,20 @@ export default function TrackOrderPage() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-primary text-primary-foreground h-11 w-full rounded-md text-sm font-semibold hover:opacity-90 disabled:opacity-60"
+          className="bg-primary text-primary-foreground h-11 w-full rounded-lg text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md disabled:pointer-events-none disabled:opacity-60"
         >
           {loading ? "Looking up…" : "Track Order"}
         </button>
       </form>
 
       {order && (
-        <div className="border-border bg-card mt-8 rounded-xl border p-6">
-          <p className="text-secondary text-sm font-semibold tracking-wide uppercase">
+        <div className="border-border bg-card animate-in fade-in mt-6 rounded-xl border p-6 shadow-sm duration-300">
+          <span
+            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase ${STATUS_STYLES[order.status] ?? "bg-muted text-muted-foreground"}`}
+          >
             {STATUS_LABELS[order.status] ?? order.status}
-          </p>
-          <h2 className="text-foreground mt-1 text-lg font-bold">
+          </span>
+          <h2 className="text-foreground mt-3 text-lg font-bold">
             Order {order.orderNumber}
           </h2>
           <p className="text-muted-foreground mt-1 text-xs">

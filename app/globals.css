@@ -129,6 +129,10 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply scroll-smooth font-sans;
+  }
+  ::selection {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
   }
 }

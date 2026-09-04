@@ -6,14 +6,15 @@ export default function NotFound() {
       <p className="text-primary text-2xl font-bold">
         Byte<span className="text-secondary">Haven</span>
       </p>
-      <h1 className="text-foreground mt-6 text-xl font-bold">Page not found</h1>
+      <p className="text-muted-foreground/60 mt-6 text-6xl font-bold">404</p>
+      <h1 className="text-foreground mt-2 text-xl font-bold">Page not found</h1>
       <p className="text-muted-foreground mt-2 max-w-sm text-sm">
         The page you&apos;re looking for doesn&apos;t exist or may have been
         moved.
       </p>
       <Link
         href="/"
-        className="bg-primary text-primary-foreground mt-6 inline-flex h-11 items-center justify-center rounded-md px-6 text-sm font-semibold hover:opacity-90"
+        className="bg-primary text-primary-foreground mt-6 inline-flex h-11 items-center justify-center rounded-lg px-6 text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
       >
         Back to Home
       </Link>

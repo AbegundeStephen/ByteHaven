@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products";
 import { db } from "@/lib/db";
@@ -98,7 +99,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="grid gap-8 lg:grid-cols-2">
+
+      <nav aria-label="Breadcrumb" className="text-muted-foreground text-sm">
+        <ol className="flex items-center gap-1.5">
+          <li>
+            <Link
+              href="/shop"
+              className="hover:text-secondary transition-colors"
+            >
+              Shop
+            </Link>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li>
+            <Link
+              href={`/shop/${product.category.slug}`}
+              className="hover:text-secondary transition-colors"
+            >
+              {product.category.name}
+            </Link>
+          </li>
+        </ol>
+      </nav>
+
+      <div className="mt-4 grid gap-10 lg:grid-cols-2">
         <ImageGallery images={product.images} alt={product.name} />
 
         <div>
@@ -114,59 +138,75 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </span>
           </div>
 
-          <div className="mt-4 flex items-baseline gap-3">
-            <span className="text-primary text-3xl font-bold">
-              {naira.format(Number(product.discountPrice ?? product.price))}
-            </span>
-            {hasDiscount && (
-              <span className="text-muted-foreground text-lg line-through">
-                {naira.format(Number(product.price))}
+          <div className="border-border mt-6 rounded-xl border p-5">
+            <div className="flex items-baseline gap-3">
+              <span className="text-primary text-3xl font-bold">
+                {naira.format(Number(product.discountPrice ?? product.price))}
               </span>
-            )}
-          </div>
+              {hasDiscount && (
+                <span className="text-muted-foreground text-lg line-through">
+                  {naira.format(Number(product.price))}
+                </span>
+              )}
+            </div>
 
-          <p className="mt-2 text-sm font-medium">
-            {isSoldOut ? (
-              <span className="text-destructive">Out of stock</span>
-            ) : product.stockQuantity <= 3 ? (
-              <span className="text-accent-foreground">
-                Only {product.stockQuantity} left in stock
-              </span>
-            ) : (
-              <span className="text-secondary">In stock</span>
-            )}
-          </p>
+            <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium">
+              {isSoldOut ? (
+                <>
+                  <span className="bg-destructive h-2 w-2 rounded-full" />
+                  <span className="text-destructive">Out of stock</span>
+                </>
+              ) : product.stockQuantity <= 3 ? (
+                <>
+                  <span className="bg-accent h-2 w-2 rounded-full" />
+                  <span className="text-accent-foreground">
+                    Only {product.stockQuantity} left in stock
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="bg-secondary h-2 w-2 rounded-full" />
+                  <span className="text-secondary">In stock</span>
+                </>
+              )}
+            </p>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <AddToCartButton
-              productId={product.id}
-              slug={product.slug}
-              name={product.name}
-              brand={product.brand}
-              imageUrl={product.images[0]?.url ?? null}
-              unitPrice={Number(product.discountPrice ?? product.price)}
-              stockQuantity={product.stockQuantity}
-              isSoldOut={isSoldOut}
-            />
-            {whatsappLink && (
-              <WhatsAppCtaButton link={whatsappLink} label="Chat on WhatsApp" />
-            )}
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <AddToCartButton
+                productId={product.id}
+                slug={product.slug}
+                name={product.name}
+                brand={product.brand}
+                imageUrl={product.images[0]?.url ?? null}
+                unitPrice={Number(product.discountPrice ?? product.price)}
+                stockQuantity={product.stockQuantity}
+                isSoldOut={isSoldOut}
+              />
+              {whatsappLink && (
+                <WhatsAppCtaButton
+                  link={whatsappLink}
+                  label="Chat on WhatsApp"
+                />
+              )}
+            </div>
           </div>
 
           <div className="mt-8">
-            <h2 className="text-foreground text-sm font-semibold">
+            <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+              <span className="bg-secondary h-4 w-1 rounded-full" />
               Specifications
             </h2>
-            <div className="mt-2">
+            <div className="mt-3">
               <SpecsTable specs={product.specs as Record<string, string>} />
             </div>
           </div>
 
           <div className="mt-8">
-            <h2 className="text-foreground text-sm font-semibold">
+            <h2 className="text-foreground flex items-center gap-2 text-sm font-semibold">
+              <span className="bg-secondary h-4 w-1 rounded-full" />
               Description
             </h2>
-            <p className="text-muted-foreground mt-2 text-sm whitespace-pre-line">
+            <p className="text-muted-foreground mt-3 text-sm leading-relaxed whitespace-pre-line">
               {product.description}
             </p>
           </div>
@@ -176,7 +216,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {related.length > 0 && (
         <div className="mt-16">
           <h2 className="text-primary text-xl font-bold">Related products</h2>
-          <div className="mt-4">
+          <div className="mt-5">
             <ProductGrid products={related} />
           </div>
         </div>

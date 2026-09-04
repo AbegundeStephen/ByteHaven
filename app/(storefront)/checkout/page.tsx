@@ -12,6 +12,9 @@ const naira = new Intl.NumberFormat("en-NG", {
   maximumFractionDigits: 0,
 });
 
+const inputClass =
+  "border-input bg-background focus:ring-ring mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none transition-shadow focus:ring-2";
+
 export default function CheckoutPage() {
   const hydrated = useHydrated();
   const router = useRouter();
@@ -83,7 +86,7 @@ export default function CheckoutPage() {
         <p className="text-foreground font-medium">Your cart is empty.</p>
         <Link
           href="/shop"
-          className="bg-secondary text-secondary-foreground mt-4 inline-flex h-10 items-center justify-center rounded-md px-5 text-sm font-medium hover:opacity-90"
+          className="bg-secondary text-secondary-foreground mt-4 inline-flex h-11 items-center justify-center rounded-lg px-6 text-sm font-medium shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md"
         >
           Continue Shopping
         </Link>
@@ -98,7 +101,7 @@ export default function CheckoutPage() {
       <div className="mt-6 grid gap-8 lg:grid-cols-3">
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 lg:col-span-2"
+          className="border-border bg-card space-y-5 rounded-xl border p-6 shadow-sm lg:col-span-2"
           noValidate
         >
           <div>
@@ -112,7 +115,7 @@ export default function CheckoutPage() {
               id="checkout-name"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
-              className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+              className={inputClass}
             />
           </div>
           <div>
@@ -127,7 +130,7 @@ export default function CheckoutPage() {
               type="email"
               value={customerEmail}
               onChange={(e) => setCustomerEmail(e.target.value)}
-              className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+              className={inputClass}
             />
           </div>
           <div>
@@ -143,7 +146,7 @@ export default function CheckoutPage() {
               value={customerPhone}
               onChange={(e) => setCustomerPhone(e.target.value)}
               placeholder="08012345678"
-              className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+              className={inputClass}
             />
           </div>
 
@@ -151,25 +154,32 @@ export default function CheckoutPage() {
             <legend className="text-foreground text-sm font-medium">
               Delivery method
             </legend>
-            <div className="mt-2 flex gap-4">
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="radio"
-                  name="deliveryMethod"
-                  checked={deliveryMethod === "delivery"}
-                  onChange={() => setDeliveryMethod("delivery")}
-                />
-                Delivery
-              </label>
-              <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="radio"
-                  name="deliveryMethod"
-                  checked={deliveryMethod === "pickup"}
-                  onChange={() => setDeliveryMethod("pickup")}
-                />
-                Pickup in person
-              </label>
+            <div className="mt-2 grid grid-cols-2 gap-3">
+              {(
+                [
+                  { value: "delivery", label: "Delivery" },
+                  { value: "pickup", label: "Pickup in person" },
+                ] as const
+              ).map((option) => (
+                <label
+                  key={option.value}
+                  className={`flex cursor-pointer items-center justify-center rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${
+                    deliveryMethod === option.value
+                      ? "border-secondary bg-secondary/10 text-secondary"
+                      : "border-input hover:bg-muted"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="deliveryMethod"
+                    value={option.value}
+                    checked={deliveryMethod === option.value}
+                    onChange={() => setDeliveryMethod(option.value)}
+                    className="sr-only"
+                  />
+                  {option.label}
+                </label>
+              ))}
             </div>
           </fieldset>
 
@@ -186,7 +196,7 @@ export default function CheckoutPage() {
                 value={deliveryAddress}
                 onChange={(e) => setDeliveryAddress(e.target.value)}
                 rows={3}
-                className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+                className={inputClass}
               />
             </div>
           )}
@@ -198,13 +208,13 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="bg-primary text-primary-foreground h-11 w-full rounded-md text-sm font-semibold hover:opacity-90 disabled:opacity-60 sm:w-auto sm:px-8"
+            className="bg-primary text-primary-foreground h-11 w-full rounded-lg text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md disabled:pointer-events-none disabled:opacity-60 sm:w-auto sm:px-8"
           >
             {submitting ? "Placing order…" : "Place Order"}
           </button>
         </form>
 
-        <div className="border-border bg-card h-fit rounded-xl border p-4">
+        <div className="border-border bg-card h-fit rounded-xl border p-5 shadow-sm">
           <h2 className="text-foreground text-sm font-semibold">
             Order Summary
           </h2>

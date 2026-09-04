@@ -15,6 +15,9 @@ const CONDITIONS = [
   { value: "refurbished", label: "Refurbished" },
 ];
 
+const inputClass =
+  "border-input bg-background focus:ring-ring mt-1 w-full rounded-lg border px-3 py-2 text-sm outline-none transition-shadow focus:ring-2";
+
 export function ShopFilters({
   categories,
   brands,
@@ -63,7 +66,7 @@ export function ShopFilters({
   }
 
   const content = (
-    <div className="space-y-6">
+    <div className="border-border bg-card space-y-6 rounded-xl border p-5 shadow-sm">
       <div>
         <label
           htmlFor="filter-search"
@@ -76,7 +79,7 @@ export function ShopFilters({
           defaultValue={searchParams.get("q") ?? ""}
           onChange={(e) => updateParams({ q: e.target.value || null })}
           placeholder="Search products…"
-          className="border-input bg-background focus:ring-ring mt-1 w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+          className={inputClass}
         />
       </div>
 
@@ -92,7 +95,7 @@ export function ShopFilters({
             id="filter-category"
             defaultValue=""
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="border-input bg-background mt-1 w-full rounded-md border px-3 py-2 text-sm"
+            className={inputClass}
           >
             <option value="">All categories</option>
             {categories.map((c) => (
@@ -106,7 +109,7 @@ export function ShopFilters({
 
       <div>
         <p className="text-foreground text-sm font-medium">Condition</p>
-        <div className="mt-2 space-y-1.5">
+        <div className="mt-2 space-y-2">
           {CONDITIONS.map((c) => (
             <label key={c.value} className="flex items-center gap-2 text-sm">
               <input
@@ -115,7 +118,7 @@ export function ShopFilters({
                 onChange={() =>
                   toggleListValue("condition", c.value, currentConditions)
                 }
-                className="border-input h-4 w-4 rounded"
+                className="accent-secondary h-4 w-4 rounded"
               />
               {c.label}
             </label>
@@ -126,7 +129,7 @@ export function ShopFilters({
       {brands.length > 0 && (
         <div>
           <p className="text-foreground text-sm font-medium">Brand</p>
-          <div className="mt-2 max-h-40 space-y-1.5 overflow-y-auto">
+          <div className="mt-2 max-h-40 space-y-2 overflow-y-auto">
             {brands.map((brand) => (
               <label key={brand} className="flex items-center gap-2 text-sm">
                 <input
@@ -135,7 +138,7 @@ export function ShopFilters({
                   onChange={() =>
                     toggleListValue("brand", brand, currentBrands)
                   }
-                  className="border-input h-4 w-4 rounded"
+                  className="accent-secondary h-4 w-4 rounded"
                 />
                 {brand}
               </label>
@@ -157,7 +160,7 @@ export function ShopFilters({
             placeholder="Min"
             defaultValue={searchParams.get("minPrice") ?? ""}
             onBlur={(e) => updateParams({ minPrice: e.target.value || null })}
-            className="border-input bg-background w-full rounded-md border px-3 py-2 text-sm"
+            className={`${inputClass} mt-0`}
           />
           <span className="text-muted-foreground">–</span>
           <label htmlFor="filter-max-price" className="sr-only">
@@ -170,7 +173,7 @@ export function ShopFilters({
             placeholder="Max"
             defaultValue={searchParams.get("maxPrice") ?? ""}
             onBlur={(e) => updateParams({ maxPrice: e.target.value || null })}
-            className="border-input bg-background w-full rounded-md border px-3 py-2 text-sm"
+            className={`${inputClass} mt-0`}
           />
         </div>
       </div>
@@ -187,7 +190,7 @@ export function ShopFilters({
           defaultValue={searchParams.get("ram") ?? ""}
           onBlur={(e) => updateParams({ ram: e.target.value || null })}
           placeholder="e.g. 16GB"
-          className="border-input bg-background mt-1 w-full rounded-md border px-3 py-2 text-sm"
+          className={inputClass}
         />
       </div>
 
@@ -203,7 +206,7 @@ export function ShopFilters({
           defaultValue={searchParams.get("storage") ?? ""}
           onBlur={(e) => updateParams({ storage: e.target.value || null })}
           placeholder="e.g. 512GB"
-          className="border-input bg-background mt-1 w-full rounded-md border px-3 py-2 text-sm"
+          className={inputClass}
         />
       </div>
 
@@ -219,7 +222,7 @@ export function ShopFilters({
           defaultValue={searchParams.get("screenSize") ?? ""}
           onBlur={(e) => updateParams({ screenSize: e.target.value || null })}
           placeholder="e.g. 15.6-inch"
-          className="border-input bg-background mt-1 w-full rounded-md border px-3 py-2 text-sm"
+          className={inputClass}
         />
       </div>
     </div>
@@ -231,8 +234,16 @@ export function ShopFilters({
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="border-input bg-background w-full rounded-md border px-4 py-2 text-sm font-medium"
+          className="border-input bg-background flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium shadow-sm"
         >
+          <svg
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+            className="h-4 w-4"
+          >
+            <path d="M10 3a1 1 0 0 1 1 1v1.5h5a1 1 0 1 1 0 2h-5V9a1 1 0 1 1-2 0V7.5H4a1 1 0 0 1 0-2h5V4a1 1 0 0 1 1-1Zm-6 11a1 1 0 0 1 1-1h5v-1.5a1 1 0 1 1 2 0V13h5a1 1 0 1 1 0 2h-5v1.5a1 1 0 1 1-2 0V15H5a1 1 0 0 1-1-1Z" />
+          </svg>
           {open ? "Hide filters" : "Show filters"}
         </button>
         {open && <div className="mt-4">{content}</div>}

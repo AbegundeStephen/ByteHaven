@@ -8,8 +8,12 @@ const FOOTER_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="border-border bg-primary text-primary-foreground border-t">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <footer className="bg-primary text-primary-foreground relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="from-secondary via-accent to-secondary absolute inset-x-0 top-0 h-px bg-gradient-to-r opacity-60"
+      />
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-lg font-bold">
@@ -35,7 +39,7 @@ export function Footer() {
             </ul>
           </nav>
 
-          <div className="text-primary-foreground/70 text-sm">
+          <div className="text-primary-foreground/60 text-sm">
             <p>
               &copy; {new Date().getFullYear()} ByteHaven. All rights reserved.
             </p>

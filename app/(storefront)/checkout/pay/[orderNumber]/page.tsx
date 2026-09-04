@@ -82,8 +82,9 @@ export default function PayPage() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-16 text-center sm:px-6 lg:px-8">
-        <p className="text-muted-foreground text-sm">Loading order…</p>
+      <div className="mx-auto flex max-w-lg flex-col items-center px-4 py-16 text-center sm:px-6 lg:px-8">
+        <div className="border-border border-t-secondary h-8 w-8 animate-spin rounded-full border-2" />
+        <p className="text-muted-foreground mt-4 text-sm">Loading order…</p>
       </div>
     );
   }
@@ -100,7 +101,7 @@ export default function PayPage() {
 
   return (
     <div className="mx-auto max-w-lg px-4 py-12 sm:px-6 lg:px-8">
-      <div className="border-border bg-card rounded-xl border p-8">
+      <div className="border-border bg-card rounded-xl border p-8 shadow-sm">
         <p className="text-secondary text-sm font-semibold tracking-wide uppercase">
           Order {order.orderNumber}
         </p>
@@ -135,10 +136,26 @@ export default function PayPage() {
           type="button"
           onClick={handlePayNow}
           disabled={paying}
-          className="bg-primary text-primary-foreground mt-6 h-12 w-full rounded-md text-sm font-semibold transition-colors hover:opacity-90 disabled:opacity-60"
+          className="bg-primary text-primary-foreground mt-6 h-12 w-full rounded-lg text-sm font-semibold shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md disabled:pointer-events-none disabled:opacity-60"
         >
           {paying ? "Opening payment…" : "Pay Now"}
         </button>
+
+        <p className="text-muted-foreground mt-4 flex items-center justify-center gap-1.5 text-xs">
+          <svg
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+            className="h-3.5 w-3.5"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 1a4.5 4.5 0 0 0-4.5 4.5V9H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-.5V5.5A4.5 4.5 0 0 0 10 1Zm3 8V5.5a3 3 0 1 0-6 0V9h6Z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Secured by Paystack
+        </p>
       </div>
     </div>
   );

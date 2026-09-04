@@ -14,7 +14,7 @@ export function WhatsAppCtaButton({
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#25D366] px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90 ${className}`}
+      className={`inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-[#25D366] px-6 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:opacity-90 hover:shadow-md active:translate-y-0 ${className}`}
     >
       <svg
         viewBox="0 0 24 24"

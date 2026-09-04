@@ -30,17 +30,19 @@ export function SpecsTable({ specs }: { specs: Record<string, string> }) {
   if (entries.length === 0) return null;
 
   return (
-    <table className="w-full text-sm">
-      <tbody>
-        {entries.map(([key, value]) => (
-          <tr key={key} className="border-border border-b last:border-0">
-            <td className="text-foreground py-2 pr-4 font-medium">
-              {LABELS[key] ?? key}
-            </td>
-            <td className="text-muted-foreground py-2">{value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="border-border overflow-hidden rounded-lg border">
+      <table className="w-full text-sm">
+        <tbody>
+          {entries.map(([key, value], i) => (
+            <tr key={key} className={i % 2 === 1 ? "bg-muted/50" : undefined}>
+              <td className="text-foreground w-1/3 px-4 py-2.5 font-medium">
+                {LABELS[key] ?? key}
+              </td>
+              <td className="text-muted-foreground px-4 py-2.5">{value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
