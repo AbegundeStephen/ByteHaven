@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/brand/logo";
 
 const FOOTER_LINKS = [
   { href: "/shop", label: "Shop" },
@@ -16,9 +17,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <p className="text-lg font-bold">
-              Akin<span className="text-accent">Store</span>
-            </p>
+            <Logo size={28} tone="light" textClassName="text-lg font-bold" />
             <p className="text-primary-foreground/70 mt-1 max-w-xs text-sm">
               Quality Laptops. Verified Deals. Delivered With Trust.
             </p>

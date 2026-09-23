@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CartButton } from "@/components/storefront/cart-button";
+import { Logo } from "@/components/brand/logo";
 
 const NAV_LINKS = [
   { href: "/shop", label: "Shop" },
@@ -30,10 +31,11 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="group flex items-center gap-2">
-          <span className="text-primary text-xl font-bold tracking-tight transition-transform duration-200 group-hover:scale-[1.03]">
-            Akin<span className="text-secondary">Store</span>
-          </span>
+        <Link
+          href="/"
+          className="flex items-center gap-2 transition-transform duration-200 hover:scale-[1.03]"
+        >
+          <Logo size={32} tone="dark" />
         </Link>
 
         <nav className="text-foreground hidden items-center gap-8 text-sm font-medium md:flex">

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "next-auth";
+import { Logo } from "@/components/brand/logo";
 
 interface AdminShellProps {
   session: Session | null;
@@ -34,7 +35,12 @@ export function AdminShell({
       <header className="border-border bg-primary text-primary-foreground border-b">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-8">
-            <span className="font-bold tracking-tight">AkinStore Admin</span>
+            <span className="flex items-center gap-2">
+              <Logo size={26} tone="light" textClassName="text-base font-bold tracking-tight" />
+              <span className="text-primary-foreground/70 text-sm font-medium">
+                Admin
+              </span>
+            </span>
             <nav className="hidden items-center gap-1 sm:flex">
               {NAV_LINKS.map((link) => {
                 const active =

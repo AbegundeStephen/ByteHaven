@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Logo } from "@/components/brand/logo";
 
 export function LoginForm() {
   const router = useRouter();
@@ -41,7 +42,12 @@ export function LoginForm() {
 
   return (
     <div className="border-border bg-card w-full max-w-sm rounded-xl border p-8 shadow-sm">
-      <h1 className="text-primary text-xl font-bold">AkinStore Admin</h1>
+      <h1 className="flex items-center gap-2">
+        <Logo size={30} tone="dark" />
+        <span className="text-muted-foreground text-base font-medium">
+          Admin
+        </span>
+      </h1>
       <p className="text-muted-foreground mt-1 text-sm">
         Sign in to manage the store.
       </p>
