@@ -14,7 +14,7 @@ import { Pagination } from "@/components/storefront/pagination";
 export const metadata: Metadata = {
   title: "Shop All Products",
   description:
-    "Browse laptops and laptop accessories at ByteHaven — new, UK-used, and refurbished, with verified pricing and specs.",
+    "Browse laptops and laptop accessories at AkinStore — new, UK-used, and refurbished, with verified pricing and specs.",
 };
 
 interface ShopPageProps {

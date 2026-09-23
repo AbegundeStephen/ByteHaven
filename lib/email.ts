@@ -37,7 +37,7 @@ function emailShell(title: string, bodyHtml: string): string {
   <body style="margin:0;padding:0;background:#f1f5f9;">
     <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;padding:24px 16px;color:#0f172a;">
       <p style="font-size:20px;font-weight:bold;color:#0b2447;margin:0 0 16px;">
-        Byte<span style="color:#0f766e;">Haven</span>
+        Akin<span style="color:#0f766e;">Store</span>
       </p>
       <h1 style="font-size:18px;margin:0 0 12px;">${title}</h1>
       ${bodyHtml}
@@ -64,14 +64,14 @@ export async function sendOrderConfirmationEmail(
       }
     </p>
     <p style="color:#475569;font-size:13px;margin-top:24px;">
-      You can track this order anytime on ByteHaven with your order number and the email or phone you used at checkout.
+      You can track this order anytime on AkinStore with your order number and the email or phone you used at checkout.
     </p>`,
   );
 
   const result = await getClient().emails.send({
     from: fromAddress(),
     to: order.customerEmail,
-    subject: `Your ByteHaven order ${order.orderNumber} is confirmed`,
+    subject: `Your AkinStore order ${order.orderNumber} is confirmed`,
     html,
   });
   // The Resend SDK resolves with {data, error} instead of rejecting on API

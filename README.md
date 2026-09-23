@@ -1,4 +1,4 @@
-# ByteHaven
+# AkinStore
 
 Single-vendor e-commerce platform for laptops and laptop accessories. See
 `ByteHaven_SRS_UserJourney.docx` for full requirements and

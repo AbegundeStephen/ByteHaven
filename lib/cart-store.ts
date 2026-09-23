@@ -78,7 +78,7 @@ export const useCartStore = create<CartState>()(
       closeDrawer: () => set({ isDrawerOpen: false }),
     }),
     {
-      name: "bytehaven-cart",
+      name: "akinstore-cart",
       partialize: (state) => ({ items: state.items }),
     },
   ),

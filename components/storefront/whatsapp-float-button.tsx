@@ -2,7 +2,7 @@ import { buildStoreWhatsAppLink } from "@/lib/whatsapp";
 
 export function WhatsAppFloatButton() {
   const link = buildStoreWhatsAppLink(
-    "Hi! I'm interested in shopping at ByteHaven.",
+    "Hi! I'm interested in shopping at AkinStore.",
   );
   if (!link) return null;
 

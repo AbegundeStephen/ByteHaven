@@ -17,7 +17,7 @@ export function Footer() {
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <p className="text-lg font-bold">
-              Byte<span className="text-accent">Haven</span>
+              Akin<span className="text-accent">Store</span>
             </p>
             <p className="text-primary-foreground/70 mt-1 max-w-xs text-sm">
               Quality Laptops. Verified Deals. Delivered With Trust.
@@ -41,7 +41,7 @@ export function Footer() {
 
           <div className="text-primary-foreground/60 text-sm">
             <p>
-              &copy; {new Date().getFullYear()} ByteHaven. All rights reserved.
+              &copy; {new Date().getFullYear()} AkinStore. All rights reserved.
             </p>
           </div>
         </div>

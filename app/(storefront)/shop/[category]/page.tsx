@@ -32,7 +32,7 @@ export async function generateMetadata({
     title: category.name,
     description:
       category.description ??
-      `Shop ${category.name} at ByteHaven — verified pricing and specs.`,
+      `Shop ${category.name} at AkinStore — verified pricing and specs.`,
   };
 }
 

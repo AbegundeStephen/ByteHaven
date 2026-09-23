@@ -69,7 +69,7 @@ export default async function OrderConfirmationPage({
   }
 
   const whatsappLink = buildStoreWhatsAppLink(
-    `Hi, I just placed order ${order.orderNumber} on ByteHaven and wanted to confirm delivery details.`,
+    `Hi, I just placed order ${order.orderNumber} on AkinStore and wanted to confirm delivery details.`,
   );
 
   return (

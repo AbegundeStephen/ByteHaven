@@ -29,7 +29,7 @@ export default async function AdminOrderDetailPage({
   const order = await getOrderById(id);
   if (!order) notFound();
 
-  const whatsappMessage = `Hi ${order.customerName}, this is ByteHaven regarding your order ${order.orderNumber}.`;
+  const whatsappMessage = `Hi ${order.customerName}, this is AkinStore regarding your order ${order.orderNumber}.`;
   const whatsappLink = buildWhatsAppLink(order.customerPhone, whatsappMessage);
 
   return (

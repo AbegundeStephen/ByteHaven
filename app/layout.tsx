@@ -18,13 +18,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default:
-      "ByteHaven — Quality Laptops. Verified Deals. Delivered With Trust.",
-    template: "%s | ByteHaven",
+      "AkinStore — Quality Laptops. Verified Deals. Delivered With Trust.",
+    template: "%s | AkinStore",
   },
   description:
-    "ByteHaven is an online store for laptops and laptop accessories, with secure Paystack checkout and WhatsApp support.",
+    "AkinStore is an online store for laptops and laptop accessories, with secure Paystack checkout and WhatsApp support.",
   openGraph: {
-    siteName: "ByteHaven",
+    siteName: "AkinStore",
     type: "website",
     locale: "en_NG",
   },

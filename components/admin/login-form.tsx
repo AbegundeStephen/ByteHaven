@@ -41,7 +41,7 @@ export function LoginForm() {
 
   return (
     <div className="border-border bg-card w-full max-w-sm rounded-xl border p-8 shadow-sm">
-      <h1 className="text-primary text-xl font-bold">ByteHaven Admin</h1>
+      <h1 className="text-primary text-xl font-bold">AkinStore Admin</h1>
       <p className="text-muted-foreground mt-1 text-sm">
         Sign in to manage the store.
       </p>

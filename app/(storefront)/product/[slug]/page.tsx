@@ -68,7 +68,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const productLink = `${getSiteUrl()}/product/${product.slug}`;
   const whatsappLink = buildStoreWhatsAppLink(
-    `Hi, I'm interested in the ${product.name} listed on ByteHaven (${productLink}).`,
+    `Hi, I'm interested in the ${product.name} listed on AkinStore (${productLink}).`,
   );
 
   const jsonLd = {

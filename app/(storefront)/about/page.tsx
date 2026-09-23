@@ -5,7 +5,7 @@ import { buildStoreWhatsAppLink } from "@/lib/whatsapp";
 export const metadata: Metadata = {
   title: "About & Contact",
   description:
-    "About ByteHaven — a trusted online store for new, UK-used, and refurbished laptops and accessories.",
+    "About AkinStore — a trusted online store for new, UK-used, and refurbished laptops and accessories.",
 };
 
 const VALUES = [
@@ -25,16 +25,16 @@ const VALUES = [
 
 export default function AboutPage() {
   const whatsappLink = buildStoreWhatsAppLink(
-    "Hi! I have a question about ByteHaven.",
+    "Hi! I have a question about AkinStore.",
   );
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
       <h1 className="text-primary text-3xl font-bold sm:text-4xl">
-        About ByteHaven
+        About AkinStore
       </h1>
       <p className="text-muted-foreground mt-4 text-sm leading-relaxed sm:text-base">
-        ByteHaven is an online store for laptops and laptop accessories, built
+        AkinStore is an online store for laptops and laptop accessories, built
         around one simple idea: buying a used or refurbished device online
         shouldn&apos;t feel like a gamble. Every listing shows its real
         condition — new, UK-used, or refurbished — along with verified specs and

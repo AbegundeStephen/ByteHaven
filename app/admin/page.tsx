@@ -15,7 +15,7 @@ export default async function AdminHomePage() {
         Welcome, {session?.user?.name ?? "Admin"}
       </h1>
       <p className="text-muted-foreground mt-2">
-        Manage the ByteHaven catalog and orders.
+        Manage the AkinStore catalog and orders.
       </p>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">

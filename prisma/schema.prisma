@@ -1,4 +1,4 @@
-// ByteHaven data model — SRS Section 7.
+// AkinStore data model — SRS Section 7.
 // Prisma fields use idiomatic camelCase; @map/@@map keep the underlying
 // Postgres columns/tables snake_case to match the SRS field names.
 

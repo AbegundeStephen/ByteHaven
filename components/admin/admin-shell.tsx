@@ -34,7 +34,7 @@ export function AdminShell({
       <header className="border-border bg-primary text-primary-foreground border-b">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-8">
-            <span className="font-bold tracking-tight">ByteHaven Admin</span>
+            <span className="font-bold tracking-tight">AkinStore Admin</span>
             <nav className="hidden items-center gap-1 sm:flex">
               {NAV_LINKS.map((link) => {
                 const active =

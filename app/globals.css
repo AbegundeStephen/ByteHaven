@@ -49,7 +49,7 @@
 }
 
 :root {
-  /* ByteHaven brand palette: navy (trust) + teal (fresh/tech) + warm gold (value/CTA).
+  /* AkinStore brand palette: navy (trust) + teal (fresh/tech) + warm gold (value/CTA).
      All pairings below are verified ≥ 4.5:1 (text) / ≥ 3:1 (UI) for WCAG AA. */
   --background: #ffffff;
   --foreground: #0f172a;

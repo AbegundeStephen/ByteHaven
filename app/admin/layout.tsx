@@ -5,7 +5,7 @@ import { AdminShell } from "@/components/admin/admin-shell";
 export const metadata: Metadata = {
   title: {
     default: "Admin",
-    template: "%s | ByteHaven Admin",
+    template: "%s | AkinStore Admin",
   },
   robots: { index: false, follow: false },
 };
